@@ -1,5 +1,6 @@
 #include "timer.h"
 
+extern "C" {
 
 void delayMicroseconds(int i){
 	__HAL_TIM_SET_COUNTER(&htim4,0);
@@ -10,3 +11,5 @@ void delayMicroseconds(int i){
 		// counter++;
 	}
 }
+
+} // extern "C"

@@ -125,6 +125,8 @@ void Audio1Sec(void) {
  * PUBLIC FUNCTIONS
  */
 
+extern "C" {
+
 void AudioProcessing_Init(void) {
     // Clear all buffers
     memset(inputBuffer1, 0, sizeof(inputBuffer1));
@@ -198,6 +200,8 @@ void AudioProcessing_ResetRecording(void) {
 uint16_t* AudioProcessing_GetInputBuffer(void) {
     return inputBuffer1;
 }
+
+} // extern "C"
 
 /**
  * DMA CALLBACKS (Direct Memory Access): This callback function is called by the HAL Library when the half of DMA transfer is complete.

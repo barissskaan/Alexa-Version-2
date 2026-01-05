@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "led_array.h"
 #include "transmit.h"
+#include "my_main.h"
 
 
 /* USER CODE END Includes */
@@ -121,6 +122,7 @@ int main(void)
   HAL_TIM_Base_Start(&htim4);
   uint16_t on_sequence  = 0b111111000010;
   uint16_t off_sequence = 0b111111000001;
+  int f = 0;
 
   /* USER CODE END 2 */
 
@@ -131,9 +133,18 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  my_main();
+	   my_main();
 	  //led_func(4);
-	  //sendSequence(on_sequence);
+      // Test code - commented out for audio-triggered operation
+      /*
+      if(f == 0) {
+      	sendSequence(on_sequence);
+      	f = 1;
+      } else {
+      	sendSequence(off_sequence);
+      	f = 0;
+      }
+      */
   }
   /* USER CODE END 3 */
 }

@@ -1,5 +1,7 @@
 #include "led_array.h"
 
+extern "C" {
+
 static GPIO_TypeDef* port_arr[10] = {GPIOG,GPIOG,GPIOF,GPIOE,GPIOF,GPIOE,GPIOE,GPIOF,GPIOF,GPIOD};
 static uint16_t pin_arr[10] = {GPIO_PIN_9,GPIO_PIN_14,GPIO_PIN_15,GPIO_PIN_13,GPIO_PIN_14,GPIO_PIN_11,GPIO_PIN_9,GPIO_PIN_13,GPIO_PIN_12,GPIO_PIN_15};
 
@@ -14,6 +16,8 @@ void led_func(int led_count){
 	}
 
 }
+
+} // extern "C"
 
 
 

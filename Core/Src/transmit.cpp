@@ -1,6 +1,8 @@
 #include "transmit.h"
 #include "stm32f4xx_hal.h"
 
+extern "C" {
+
 void transmit(int high_val,int low_val){
 	HAL_GPIO_WritePin(GPIOF,GPIO_PIN_9,GPIO_PIN_RESET);
 	delayMicroseconds(high_val*350);
@@ -11,6 +13,10 @@ void transmit(int high_val,int low_val){
 
 	}
 void sendSequence(uint16_t bitSequence){
+	// CRITICAL: Disable interrupts during transmission to prevent timing issues
+	// I2S DMA interrupts can interfere with microsecond-precise timing
+	__disable_irq();
+	
 	uint16_t ref = 0x0800;
 	for(int i = 0; i < 10; i++){
 		uint16_t tempSequence = bitSequence;
@@ -30,5 +36,10 @@ void sendSequence(uint16_t bitSequence){
 
 
 	}
+	
+	// Re-enable interrupts after transmission is complete
+	__enable_irq();
 
 }
+
+} // extern "C"

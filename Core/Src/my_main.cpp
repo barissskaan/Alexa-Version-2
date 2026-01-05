@@ -20,7 +20,19 @@ extern "C" int _write(int file, char* ptr, int len) {
     return len;
 }
 
-void my_main(void) {
+extern "C" void my_main(void) {
+    // Visual confirmation that my_main is running
+    uint16_t on  =  0b111111000010;
+    uint16_t off = 0b111111000001;
+    sendSequence(off);
+
+    for(int i = 0; i < 3; i++) {
+        led_func(10);  // All LEDs ON
+        HAL_Delay(200);
+        led_func(0);   // All LEDs OFF
+        HAL_Delay(200);
+    }
+    
     printf("\r\n");
     printf("   DIY Alexa - Aufgabe 1\r\n");
 
@@ -57,8 +69,8 @@ void my_main(void) {
     printf("\r\n>>> Listening for audio...\r\n\r\n");
 
     // Main loop
-    uint16_t on = 0b111111000010;
-    uint16_t off = 0b111111000001;
+    bool flag = false;
+
     while (1) {
         // Check if recording just completed (flag set by ISR)
         if (AudioProcessing_IsRecordingComplete()) {
@@ -66,10 +78,18 @@ void my_main(void) {
             printf("\r\n>>> Aufnahme beendet. Dauer: %lu ms\r\n",
                    HAL_GetTick() - AudioProcessing_GetRecordingStartTime());
             printf("    Samples: 16000\r\n");
-
-            sendSequence(on);
-            sendSequence(off);
-
+            
+            // Toggle steckdose: ein/aus bei jedem Schwellwert-Überschreiten
+            if(flag == false) {
+                printf(">>> Steckdose EIN\r\n");
+                sendSequence(on);
+                flag = true;
+            } else {
+                printf(">>> Steckdose AUS\r\n");
+                sendSequence(off);
+                flag = false;
+            }
+            
             // Reset recording state
             AudioProcessing_ResetRecording();
             AudioProcessing_ClearRecordingComplete();
