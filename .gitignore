@@ -1,0 +1,32 @@
+# =========================
+# Build outputs
+# =========================
+Debug/
+Release/
+build/
+
+# =========================
+# Object / binary files
+# =========================
+*.o
+*.d
+*.elf
+*.map
+*.list
+*.hex
+*.bin
+
+# =========================
+# IDE specific (Eclipse / CubeIDE)
+# =========================
+.metadata/
+*.launch
+.settings/org.eclipse.cdt.core.prefs
+.settings/language.settings.xml
+
+# =========================
+# OS junk
+# =========================
+.DS_Store
+Thumbs.db
+
