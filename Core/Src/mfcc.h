@@ -10,6 +10,7 @@
 
 #include "string.h"
 #include "arm_math.h"
+#include <cmath>
 
 #define SAMP_FREQ 16000
 #define NUM_FBANK_BINS 40

@@ -103,7 +103,6 @@ void KWS::printReport() {
 	printf("------------------------------------------------------\r\n");
 }
 
-// TODO Vervollständige diese Funktion
 /*
 	Runs the inference and returns index of detected word. When being called, the batch_size can be chosen as 1
 */
@@ -114,15 +113,16 @@ int KWS::runInference(int batch_size) {
 	ai_input[0].data = AI_HANDLE_PTR(mMFCC);
 	ai_output[0].data = AI_HANDLE_PTR(out_data);
 
-	//////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////// TODO füge hier deinen Code ein ////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////
+	// Run the neural network inference
+	nbatch = ai_network_run(network, &ai_input[0], &ai_output[0]);
 
+	if (nbatch != batch_size) {
+		ai_err = ai_network_get_error(network);
+		printf("E: AI inference failed - type=%d code=%d\r\n", ai_err.type, ai_err.code);
+		return -1;
+	}
 
-
-
-	//////////////////////////////////////////////////////////////////////////////////////
-
+	// Find the maximum output value (predicted class)
 	float max_value = out_data[0];
 	uint32_t max_index = 0;
 	for (uint32_t i = 0; i < AI_NETWORK_OUT_1_SIZE; i++) {
@@ -151,3 +151,7 @@ std::string KWS::indexToWord(int index) {
     default: return "_ERROR_";
 	}
 }
+
+
+
+

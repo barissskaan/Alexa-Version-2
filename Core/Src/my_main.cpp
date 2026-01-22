@@ -4,9 +4,11 @@
 #include "timer.h"
 #include "transmit.h"
 #include "audio_processing.h"
+#include "keyword_spotting.h"
 #include <stdio.h>
 #include <cmath>
 #include <cstring>
+#include <string>
 
 // EXTERNAL HAL HANDLES
 extern TIM_HandleTypeDef htim4;    // Timer for microsecond delays
@@ -34,10 +36,15 @@ extern "C" void my_main(void) {
     }
     
     printf("\r\n");
-    printf("   DIY Alexa - Aufgabe 1\r\n");
+    printf("========================================\r\n");
+    printf("   DIY Alexa - Keyword Spotting System\r\n");
+    printf("========================================\r\n");
 
     // Initialize audio processing module
     AudioProcessing_Init();
+    
+    // Initialize keyword spotting system (MFCC + Neural Network)
+    KeywordSpotting_Init();
 
     // Start I2S DMA reception
     HAL_StatusTypeDef status = HAL_I2S_Receive_DMA(&hi2s2, AudioProcessing_GetInputBuffer(), I2S_BUF_SIZE);
@@ -66,10 +73,10 @@ extern "C" void my_main(void) {
 
     // Enable data processing
     AudioProcessing_Enable(true);
-    printf("\r\n>>> Listening for audio...\r\n\r\n");
+    printf("\r\n>>> Listening for keywords (ON/OFF)...\r\n\r\n");
 
     // Main loop
-    bool flag = false;
+    bool socketState = false;  // false = OFF, true = ON
 
     while (1) {
         // Check if recording just completed (flag set by ISR)
@@ -79,22 +86,51 @@ extern "C" void my_main(void) {
                    HAL_GetTick() - AudioProcessing_GetRecordingStartTime());
             printf("    Samples: 16000\r\n");
             
-            // Toggle steckdose: ein/aus bei jedem Schwellwert-Überschreiten
-            if(flag == false) {
-                printf(">>> Steckdose EIN\r\n");
-                sendSequence(on);
-                flag = true;
-            } else {
-                printf(">>> Steckdose AUS\r\n");
-                sendSequence(off);
-                flag = false;
+            // Get recorded audio data
+            int32_t* audioData = AudioProcessing_GetRecordedData();
+            
+            // Process audio with keyword spotting (MFCC + Neural Network)
+            std::string detectedWord = KeywordSpotting_ProcessAudio(audioData);
+            
+            // Control socket based on detected keyword
+            if (detectedWord == "ON") {
+                if (!socketState) {
+                    printf("\r\n>>> [ACTION] Turning Socket ON\r\n");
+                    sendSequence(on);
+                    socketState = true;
+                    // Visual feedback
+                    for (int i = 0; i < 2; i++) {
+                        led_func(10);
+                        HAL_Delay(100);
+                        led_func(0);
+                        HAL_Delay(100);
+                    }
+                } else {
+                    printf("\r\n>>> Socket is already ON\r\n");
+                }
+            } 
+            else if (detectedWord == "OFF") {
+                if (socketState) {
+                    printf("\r\n>>> [ACTION] Turning Socket OFF\r\n");
+                    sendSequence(off);
+                    socketState = false;
+                    // Visual feedback
+                    led_func(10);
+                    HAL_Delay(500);
+                    led_func(0);
+                } else {
+                    printf("\r\n>>> Socket is already OFF\r\n");
+                }
+            }
+            else {
+                printf("\r\n>>> No action taken for: %s\r\n", detectedWord.c_str());
             }
             
             // Reset recording state
             AudioProcessing_ResetRecording();
             AudioProcessing_ClearRecordingComplete();
 
-            printf("\r\n>>> Listening for audio...\r\n\r\n");
+            printf("\r\n>>> Listening for keywords (ON/OFF)...\r\n\r\n");
         }
 
         // Volume display

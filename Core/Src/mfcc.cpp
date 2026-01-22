@@ -1,7 +1,12 @@
 #include <string.h>
+#include <cmath>
 
 #include "mfcc.h"
 #include "float.h"
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 MFCC::MFCC(int num_mfcc_features, int frame_len, int mfcc_dec_bits)
 	:num_mfcc_features(num_mfcc_features),
