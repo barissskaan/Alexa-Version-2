@@ -520,44 +520,44 @@
   ],
   "environment": {
     "generated_model": {
-      "generated_time": "2026-01-21T23:13:21+0100",
+      "generated_time": "2026-01-25T21:13:19+0100",
       "model_files": [
         {
           "name": "network_data_params.h",
-          "signature": "0xad23533b0aa5db41465dc9b86900ce6b"
+          "signature": "0x851a8f0a2bfd488c9030ba964934dd31"
         },
         {
           "name": "network_data_params.c",
-          "signature": "0xa92f58708feca0ce4b791ea1ee346cc1"
+          "signature": "0x9c8e454ce2ae3c3c551cfc2a76cd805c"
         },
         {
           "name": "network_data.h",
-          "signature": "0x15c6a543008ea65da373ad508c07f21c"
+          "signature": "0xb6bda0b0ce1329749ef49b3f604316fa"
         },
         {
           "name": "network_data.c",
-          "signature": "0x94116c32bd02c88d273af9469cb81812"
+          "signature": "0x06b3a212c7443e124b0c0821ae4bc262"
         },
         {
           "name": "network_config.h",
-          "signature": "0xd7f08043ae1e782b7ab45da71bf83899"
+          "signature": "0x28a29b37b526916c937b4af744ddd275"
         },
         {
           "name": "network.h",
-          "signature": "0x8501906aff7eebfdd747619a71ac3874"
+          "signature": "0xd947f6707c64e55ecf525055a66fcf7a"
         },
         {
           "name": "network.c",
-          "signature": "0xd4a36b81b7572b0c783f2bd637b6147d"
+          "signature": "0x3bdafbeb72c27f3fc2ed9a5cb636f79a"
         }
       ],
       "name": "network"
     },
-    "network_signature": "0x82ce2dc5bd233892",
+    "network_signature": "0x0f2f0b7eb1024e51",
     "test_name": "",
     "tools": [
       {
-        "arguments": "generate --target stm32f4 --name network -m /home/bash/Downloads/kws_model.tflite --compression none --verbosity 1 --workspace /tmp/mxAI_workspace164553373526634028799675430648868 --output /home/bash/.stm32cubemx/network_output",
+        "arguments": "generate --target stm32f4 --name network -m /home/bash/Downloads/kws_model.tflite --compression none --verbosity 1 --workspace /tmp/mxAI_workspace50407941900616054688656722450651 --output /home/bash/.stm32cubemx/network_output",
         "environment": [
           "STATS_TYPE=X-CUBE-AI"
         ],
