@@ -52,8 +52,8 @@ void ShowIdleScreen(void) {
 
 void ShowDurationMenu(void) {
     LCD_Clear();
-    LCD_PrintAt(0, 0, "1:Forever");
-    LCD_PrintAt(1, 0, "2:10 Minutes");
+    LCD_PrintAt(0, 0, "ONE/YES:Forever");
+    LCD_PrintAt(1, 0, "TWO:10 Minutes");
 }
 
 void ShowSocketOn(TimerMode mode) {
@@ -236,9 +236,9 @@ extern "C" void my_main(void) {
                     break;
                     
                 case MENU_DURATION:
-                    // Waiting for ONE or TWO to select duration
-                    if (detectedWord == "ONE") {
-                        printf("\r\n>>> [MENU] ONE selected - Forever mode\r\n");
+                    // Waiting for ONE/YES or TWO to select duration
+                    if (detectedWord == "ONE" || detectedWord == "YES") {
+                        printf("\r\n>>> [MENU] %s selected - Forever mode\r\n", detectedWord.c_str());
                         timerMode = TIMER_FOREVER;
                         sendSequence(on);
                         socketState = true;
@@ -274,9 +274,9 @@ extern "C" void my_main(void) {
                     }
                     else {
                         // Invalid input, show error
-                        printf("\r\n>>> Invalid selection: %s (say ONE or TWO)\r\n", detectedWord.c_str());
+                        printf("\r\n>>> Invalid selection: %s (say ONE/YES or TWO)\r\n", detectedWord.c_str());
                         LCD_Clear();
-                        LCD_PrintAt(0, 0, "Say: ONE or TWO");
+                        LCD_PrintAt(0, 0, "ONE/YES or TWO");
                         LCD_PrintAt(1, 0, "Try again...");
                         HAL_Delay(1500);
                         ShowDurationMenu();
