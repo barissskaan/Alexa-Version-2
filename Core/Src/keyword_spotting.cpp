@@ -7,6 +7,7 @@
  */
 
 #include "keyword_spotting.h"
+#include "audio_filter.h"
 #include "mfcc.h"
 #include "kws.h"
 #include "network.h"
@@ -35,6 +36,11 @@ static q7_t mfccOutput[NUM_MFCC_COEFFS];
 void KeywordSpotting_Init(void) {
     printf("\r\n[KWS] Initializing Keyword Spotting System...\r\n");
 
+    // Initialize audio filters
+    printf("[KWS] Initializing audio filters...\r\n");
+    AudioFilter_Init();
+    printf("[KWS] Audio filters initialized\r\n");
+
     // Create MFCC processor
     printf("[KWS] Creating MFCC processor...\r\n");
     mfccProcessor = new MFCC(NUM_MFCC_COEFFS, FRAME_LEN, MFCC_DEC_BITS);
@@ -56,8 +62,15 @@ std::string KeywordSpotting_ProcessAudio(int32_t* audioData) {
     }
 
     printf("[KWS] Processing audio data...\r\n");
+    
+    // STEP 1: Apply audio filters for noise reduction and enhancement
+    printf("[KWS] Applying audio filters...\r\n");
+    AudioFilter_Reset();  // Reset filter states for new recording
+    AudioFilter_ApplyAll(audioData, 16000);  // Filter all 16000 samples
+    printf("[KWS] Audio filtering complete\r\n");
 
-    // Extract MFCCs for each frame
+    // STEP 2: Extract MFCCs for each frame
+    printf("[KWS] Extracting MFCC features...\r\n");
     for (int frame = 0; frame < NUM_FRAMES; frame++) {
         int startIdx = frame * FRAME_SHIFT;
 
@@ -77,9 +90,9 @@ std::string KeywordSpotting_ProcessAudio(int32_t* audioData) {
     }
 
     printf("[KWS] MFCC extraction complete\r\n");
+    
+    // STEP 3: Run neural network inference
     printf("[KWS] Running neural network inference...\r\n");
-
-    // Run inference
     lastDetectionIndex = kwsSystem->runInference(1);
 
     if (lastDetectionIndex < 0) {
