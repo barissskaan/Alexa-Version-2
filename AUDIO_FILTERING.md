@@ -84,12 +84,17 @@ Raw Audio (16000 samples)
     ↓
 2. High-Pass Filter (80 Hz)
     ↓
-3. Pre-Emphasis (0.97)
+3. Low-Pass Filter (4000 Hz)
     ↓
-4. Low-Pass Filter (4000 Hz)
+4. Pre-Emphasis (0.97)
     ↓
 Filtered Audio → MFCC → Neural Network
 ```
+
+**Neden Pre-Emphasis En Sonda?**
+Pre-emphasis yüksek frekansları güçlendirir. Eğer low-pass'tan önce uygulanırsa,
+güçlendirilen yüksek frekanslar low-pass tarafından tekrar zayıflatılır.
+Bu yüzden pre-emphasis en son uygulanmalıdır.
 
 ## 🎯 Beklenen İyileştirmeler
 
@@ -119,8 +124,8 @@ std::string keyword = KeywordSpotting_ProcessAudio(audioData);
 Filtreler otomatik şu sırayla uygulanıyor:
 1. DC Removal
 2. High-Pass (80 Hz)
-3. Pre-Emphasis (0.97)
-4. Low-Pass (4000 Hz)
+3. Low-Pass (4000 Hz)
+4. Pre-Emphasis (0.97)
 
 ## 📈 Performans
 

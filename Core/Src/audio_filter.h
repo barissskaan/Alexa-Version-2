@@ -66,7 +66,8 @@ void AudioFilter_LowPass(int32_t* buffer, uint32_t length);
  * @brief  Apply complete filter chain (all filters)
  * @param  buffer: Audio buffer (in-place processing)
  * @param  length: Buffer length in samples
- * @note   Applies: DC Removal → High-Pass → Pre-Emphasis → Low-Pass
+ * @note   Applies: DC Removal → High-Pass → Low-Pass → Pre-Emphasis
+ *         Pre-emphasis is applied last to avoid attenuation by low-pass filter
  */
 void AudioFilter_ApplyAll(int32_t* buffer, uint32_t length);
 

@@ -129,18 +129,21 @@ void AudioFilter_LowPass(int32_t* buffer, uint32_t length) {
 
 /**
  * @brief Apply complete filter chain
- * @note Optimal order: DC Removal → High-Pass → Pre-Emphasis → Low-Pass
+ * @note Optimal order: DC Removal → High-Pass → Low-Pass → Pre-Emphasis
+ *       Pre-emphasis is applied LAST because it boosts high frequencies.
+ *       If applied before low-pass, those boosted frequencies would be attenuated.
  */
 void AudioFilter_ApplyAll(int32_t* buffer, uint32_t length) {
     // 1. Remove DC offset (biases can affect other filters)
     AudioFilter_RemoveDCOffset(buffer, length);
     
-    // 2. High-pass filter (remove low-frequency noise)
+    // 2. High-pass filter (remove low-frequency noise: traffic, wind, rumble)
     AudioFilter_HighPass(buffer, length);
     
-    // 3. Pre-emphasis (boost high frequencies for speech)
-    AudioFilter_PreEmphasis(buffer, length);
-    
-    // 4. Low-pass filter (remove very high frequency noise)
+    // 3. Low-pass filter (remove high-frequency noise above speech range)
     AudioFilter_LowPass(buffer, length);
+    
+    // 4. Pre-emphasis (boost high frequencies for speech clarity)
+    //    Applied LAST so the boosted frequencies are not attenuated by low-pass
+    AudioFilter_PreEmphasis(buffer, length);
 }
