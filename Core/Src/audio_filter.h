@@ -1,11 +1,3 @@
-/**
- * @file    audio_filter.h
- * @brief   Audio Signal Filtering and Enhancement Module
- * 
- * Provides signal processing filters to improve audio quality
- * and speech recognition accuracy in noisy environments.
- */
-
 #ifndef AUDIO_FILTER_H
 #define AUDIO_FILTER_H
 

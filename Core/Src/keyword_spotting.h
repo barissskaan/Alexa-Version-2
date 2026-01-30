@@ -1,11 +1,3 @@
-/**
- * @file    keyword_spotting.h
- * @brief   Keyword Spotting Module - Integrates MFCC and Neural Network
- *
- * This module provides high-level functions to process audio data
- * and recognize keywords using MFCC feature extraction and neural network inference.
- */
-
 #ifndef KEYWORD_SPOTTING_H
 #define KEYWORD_SPOTTING_H
 

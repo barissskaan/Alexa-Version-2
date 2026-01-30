@@ -1,11 +1,3 @@
-/**
- * @file    audio_filter.cpp
- * @brief   Audio Signal Filtering Implementation
- * 
- * Implements various audio filters to improve speech recognition
- * in noisy environments (traffic, background noise, etc.)
- */
-
 #include "audio_filter.h"
 #include <cmath>
 #include <cstring>

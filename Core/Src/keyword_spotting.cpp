@@ -1,11 +1,3 @@
-/**
- * @file    keyword_spotting.cpp
- * @brief   Keyword Spotting Module Implementation
- *
- * Integrates MFCC feature extraction and neural network inference
- * for real-time keyword recognition.
- */
-
 #include "keyword_spotting.h"
 #include "audio_filter.h"
 #include "mfcc.h"
